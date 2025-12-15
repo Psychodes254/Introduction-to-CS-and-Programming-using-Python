@@ -22,5 +22,5 @@ def less_50(n):
 
 funcs = [is_even, greater_10, less_50]
 
-   
-print(all_true(12, funcs))
+user_input = int(input("Type a number: ")) 
+print(all_true(user_input, funcs))
