@@ -71,8 +71,13 @@ def get_word_progress(secret_word, letters_guessed):
     returns: string, comprised of letters and asterisks (*) that represents
         which letters in secret_word have not been guessed so far
     """
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    results = ''
+    for i in range(len(secret_word)):
+        if secret_word[i] == letters_guessed[i]:
+            results += letters_guessed[i]
+        else:
+            results += "*"
+    return results
 
 
 def get_available_letters(letters_guessed):
@@ -84,9 +89,11 @@ def get_available_letters(letters_guessed):
       letters have not yet been guessed. The letters should be returned in
       alphabetical order
     """
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
-
+    alphabets = string.ascii_lowercase
+    
+    for char in letters_guessed:
+        alphabets = alphabets.replace(char, "")
+    return alphabets
 
 
 def hangman(secret_word, with_help):
