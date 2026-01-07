@@ -71,13 +71,20 @@ def get_word_progress(secret_word, letters_guessed):
     returns: string, comprised of letters and asterisks (*) that represents
         which letters in secret_word have not been guessed so far
     """
-    results = ''
+    result_list = []
+    char = list(secret_word)
+    
     for i in range(len(secret_word)):
-        if secret_word[i] == letters_guessed[i]:
-            results += letters_guessed[i]
+        if char[i] in letters_guessed:
+            result_list.append(char[i])
         else:
-            results += "*"
+            result_list.append("*")
+            
+    results = "".join(result_list)
+            
     return results
+
+# print(get_word_progress("mashe", ['s','h']))
 
 
 def get_available_letters(letters_guessed):
@@ -135,9 +142,55 @@ def hangman(secret_word, with_help):
 
     Follows the other limitations detailed in the problem write-up.
     """
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
-
+    
+    print("Welcome to Hangman!")
+    
+    print(f"I am thinking of a word that is {len(secret_word)} letters long.")
+    
+    guess = 10
+    letters = get_available_letters
+    letter_guessed = []
+    result = ''
+    vowels = ['a', 'e', 'i', 'o', 'u']
+    
+    while guess > 0:
+        print("-------------------")
+        print(f"You have {guess} guesses left.")
+        print(f"Available letters: {letters(letter_guessed)}")
+            
+        print(secret_word)
+        
+        user_input = input("Please guess a letter: ").lower()
+        if user_input == "i" and with_help:
+            guess -= 3
+            
+        if user_input not in string.ascii_lowercase or len(user_input) > 1:
+            guess -= 3
+            print(f"Oops! That is not a valid letter. Please input a letter from the alphabet: {result}")
+        if user_input in letter_guessed:
+            guess -= 2
+            print(f"Oops! You've already guessed that letter: {result}")
+        else:
+            letter_guessed.append(user_input)
+            
+        result = get_word_progress(secret_word, letter_guessed)
+        
+        if user_input in secret_word:
+            print(f"Good guess: {result}")
+        elif user_input not in secret_word:
+            guess -= 1
+            if user_input in vowels:
+                guess -= 1
+            print(f"Oops! That letter is not in my word: {result}")
+        
+        
+            
+        if has_player_won(secret_word, letter_guessed):
+            print("Congratulations, you won!")
+            break
+        
+    print("-------------------")
+    print(f"Sorry, you ran out of guesses. The word was {secret_word}.")
 
 
 # When you've completed your hangman function, scroll down to the bottom
