@@ -189,7 +189,31 @@ def get_tf(file_path):
         in the document) / (total number of words in the document)
     * Think about how we can use get_frequencies from earlier
     """
-    pass
+    # Initiate empty dict for mapping the word to its TF, 
+    # and empty list for storing splitted words from the file
+    tf_values = {}
+    # all_lines = []
+    
+    # Open the file to all the lines in a file 
+    with open(file_path, 'r') as file:
+        all_lines = file.readlines()
+        
+    # Split elem in a file
+    words = [word for item in all_lines for word in item.split()]
+    
+    # Get freq using the frequency funtion
+    freq = get_frequencies(words)
+    
+    # Sum the total values if dict
+    total_words = sum(freq.values())
+    
+    # Map each word to its TF by division of no. of word by total words
+    for k, v in freq.items():
+        tf_values[k] = v/total_words
+    
+    # Return the TF dict 
+    return tf_values
+
 
 def get_idf(file_paths):
     """
@@ -203,7 +227,37 @@ def get_idf(file_paths):
     with math.log10()
 
     """
-    pass
+    files = {}
+    idf = {}
+    no_docs = len(file_paths)
+    
+    # Open all files
+    for file_name in file_paths:
+        with open(file_name, 'r') as file:
+            files[file_name] = file.readlines()
+    
+    # Build set_words directly from files dictionary        
+    set_words = set(word for lines in files.values() for line in lines for word in line.split())
+    
+    # Convert each file's lines into a set of words 
+    for k, v in files.items():
+        files[k] = set([word for item in v for word in item.split()])
+     
+    # Iterate through set_words    
+    for elem in set_words:
+        count = 0
+        for val in files.values():
+            if elem in val:
+                count += 1
+        idf[elem] = count
+        
+    # Calculate IDF        
+    for k, v in idf.items():
+        idf[k] = math.log10(no_docs / v)
+    
+    # Return the IDF calculations    
+    return idf
+
 
 def get_tfidf(tf_file_path, idf_file_paths):
     """
@@ -274,10 +328,10 @@ if __name__ == "__main__":
 
     ## Tests Problem 5: Find TF-IDF
     # tf_text_file = 'tests/student_tests/hello_world.txt'
-    # idf_text_files = ['tests/student_tests/hello_world.txt', 'tests/student_tests/hello_friends.txt']
+    idf_text_files = ['tests/student_tests/hello_world.txt', 'tests/student_tests/hello_friends.txt']
     # tf = get_tf(tf_text_file)
-    # idf = get_idf(idf_text_files)
+    idf = get_idf(idf_text_files)
     # tf_idf = get_tfidf(tf_text_file, idf_text_files)
     # print(tf)     # should print {'hello': 0.6666666666666666, 'world': 0.3333333333333333}
-    # print(idf)    # should print {'hello': 0.0, 'world': 0.3010299956639812, 'friends': 0.3010299956639812}
+    print(idf)    # should print {'hello': 0.0, 'world': 0.3010299956639812, 'friends': 0.3010299956639812}
     # print(tf_idf) # should print [('hello', 0.0), ('world', 0.10034333188799373)]
