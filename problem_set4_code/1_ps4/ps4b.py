@@ -1,7 +1,3 @@
-# Problem Set 4B
-# Name:
-# Collaborators:
-
 import random
 
 
@@ -15,7 +11,7 @@ class Message(object):
         a Message object has one attribute:
             the message text
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
+        self.input_text = input_text
 
     def __repr__(self):
         '''
@@ -24,7 +20,7 @@ class Message(object):
 
         Returns: (string) A representation of the object
         '''
-        return f'''Message('{self.get_text()}')'''
+        return f"Message('{self.get_text()}')"
 
     def get_text(self):
         '''
@@ -32,7 +28,7 @@ class Message(object):
 
         Returns: (string) the message text
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
+        return self.input_text
 
     def shift_char(self, char, shift):
         '''
@@ -44,8 +40,24 @@ class Message(object):
 
         Returns: (string) the shifted character with ASCII value in the range [32, 126]
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
-
+        # Convert char → ASCII number using ord
+        ascii_val = ord(char)
+        
+        # Normalize into range 0–94 (ASCII 32–126 = 95 characters)
+        normalized = ascii_val - 32
+        
+        # Add the shift
+        shifted = normalized + shift
+        
+        # Use modulo (%) to wrap around
+        wrapped = shifted % 95
+        
+        # Convert back to ASCII range
+        new_ascii = wrapped + 32
+        
+        # Convert number → character using chr
+        return chr(new_ascii)
+    
     def apply_pad(self, pad):
         '''
         Used to calculate the ciphertext produced by applying a one time pad to the message text.
@@ -57,7 +69,27 @@ class Message(object):
 
         Returns: (string) The ciphertext produced using the one time pad
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
+        text = self.get_text()
+        shifted_char = []
+        
+        # Raise Index Error if the lengths of pad and string are not equal
+        if len(text) == len(pad):
+            # Loop through characters by index
+            for i in range(len(text)):
+                
+                # Get corresponding shift from pad
+                shift = pad[i]
+                
+                # Call shift_char
+                shifted = self.shift_char(text[i], shift)
+                
+                # Collect the shifted character
+                shifted_char.append(shifted)
+        else:
+            raise ValueError("Lengths are not equal!")
+            
+        # Join all shifted characters into a string        
+        return ''.join(shifted_char)
 
 
 class PlaintextMessage(Message):
