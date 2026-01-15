@@ -94,6 +94,7 @@ class Message(object):
 
 class PlaintextMessage(Message):
     def __init__(self, input_text, pad=None):
+        super.__init__(self, input_text)
         '''
         Initializes a PlaintextMessage object.
 
@@ -107,7 +108,10 @@ class PlaintextMessage(Message):
                 or generated randomly using self.generate_pad() if pad is None)
             the ciphertext (string, input_text encrypted using the pad)
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
+        if pad == None:
+            pad = self.generate_pad()
+            
+        self.pad = pad[:]
 
     def __repr__(self):
         '''
@@ -116,7 +120,7 @@ class PlaintextMessage(Message):
 
         Returns: (string) A representation of the object
         '''
-        return f'''PlaintextMessage('{self.get_text()}', {self.get_pad()})'''
+        return f"PlaintextMessage('{self.get_text()}', '{self.get_pad()}')"
 
     def generate_pad(self):
         '''
@@ -128,7 +132,11 @@ class PlaintextMessage(Message):
 
         Returns: (list of integers) the new one time pad
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
+        pad = []
+        for i in range(len(self.get_text())):
+            pad.append(random.randint(0, 110))
+            
+        return pad
 
     def get_pad(self):
         '''
@@ -136,7 +144,7 @@ class PlaintextMessage(Message):
 
         Returns: (list of integers) a COPY of your pad
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
+        return self.pad[:]
 
     def get_ciphertext(self):
         '''
@@ -144,7 +152,7 @@ class PlaintextMessage(Message):
 
         Returns: (string) the ciphertext
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
+        return self.apply_pad(self.pad)
 
     def change_pad(self, new_pad):
         '''
@@ -156,7 +164,13 @@ class PlaintextMessage(Message):
 
         Returns: nothing
         '''
-        raise NotImplementedError  # delete this line and replace with your code here
+        new_pad = self.pad.copy()
+        
+        new_pad = list(self.pad)
+        
+        new_pad = self.pad[:]
+        
+        self.pad = new_pad.copy()
 
 
 class EncryptedMessage(Message):
