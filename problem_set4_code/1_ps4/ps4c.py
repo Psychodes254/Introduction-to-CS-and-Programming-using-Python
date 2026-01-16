@@ -1,13 +1,9 @@
-# Problem Set 4C
-# Name:
-# Collaborators:
-
 import json
-import ps4b # Importing your work from Part B
+import ps4b
 
-### HELPER CODE ###
+
 def load_words(file_name):
-    '''
+    ''' 1
     file_name (string): the name of the file containing
     the list of words to load
 
@@ -56,12 +52,13 @@ def get_story_string():
 
 
 def get_story_pads():
+    count = 0
     with open('pads.txt') as json_file:
+        count += 1
         return json.load(json_file)
-
+    
 
 WORDLIST_FILENAME = 'words.txt'
-### END HELPER CODE ###
 
 
 def decrypt_message_try_pads(ciphertext, pads):
@@ -80,7 +77,39 @@ def decrypt_message_try_pads(ciphertext, pads):
 
     Returns: (PlaintextMessage) A message with the decrypted ciphertext and the best pad
     '''
-    raise NotImplementedError  # delete this line and replace with your code here
+    # Load the word list
+    word_list = load_words(WORDLIST_FILENAME)
+    
+    # Initialize tracking variables
+    max_valid_word_count = 0
+    
+    best_plaintext_message = ""
+    
+    # Loop over each pad in pads
+    for pad in pads:
+        count = 0
+        
+        # Decrypt using decrypt_message
+        plaintext_msg = ciphertext.decrypt_message(pad)
+    
+        # Extract text
+        text = plaintext_msg.get_text()
+    
+        # Split into words
+        words = text.split(" ")
+        
+        # Count valid English words
+        for word in words:
+            if is_word(word_list, word):
+                count += 1
+            
+        # Compare scores
+        if count >= max_valid_word_count:
+            max_valid_word_count = count
+            best_plaintext_message = plaintext_msg
+            
+    # Return the result (PlaintextMessage)
+    return best_plaintext_message
 
 
 def decode_story():
@@ -91,9 +120,6 @@ def decode_story():
     Returns: (string) the decoded story
 
     '''
-    raise NotImplementedError  # delete this line and replace with your code here
-
-
 
 if __name__ == '__main__':
     # # Uncomment these lines to try running decode_story()
