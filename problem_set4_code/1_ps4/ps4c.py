@@ -83,7 +83,7 @@ def decrypt_message_try_pads(ciphertext, pads):
     # Initialize tracking variables
     max_valid_word_count = 0
     
-    best_plaintext_message = ""
+    best_plaintext_message = None
     
     # Loop over each pad in pads
     for pad in pads:
@@ -119,10 +119,22 @@ def decode_story():
 
     Returns: (string) the decoded story
 
-    '''
+    ''' 
+    # Get the encrypted story text
+    story = get_story_string()
+    
+    # Turn that string into an EncryptedMessage
+    ciphertext = ps4b.EncryptedMessage(story)
+    
+    # Load the possible pads
+    pads = get_story_pads()
+    
+    # Call the function you already built
+    best_plaintext = decrypt_message_try_pads(ciphertext, pads)
+    
+    # Extract and return the final story
+    return best_plaintext.get_text()
 
 if __name__ == '__main__':
-    # # Uncomment these lines to try running decode_story()
-    # story = decode_story()
-    # print("Decoded story: ", story)
-    pass
+    story = decode_story()
+    print("Decoded story: ", story)
