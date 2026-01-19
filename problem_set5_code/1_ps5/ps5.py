@@ -12,7 +12,6 @@ def make_matrix(color):
         matrix: a transformation matrix corresponding to
                 deficiency in that color
     """
-    # You do not need to understand exactly how this function works.
     if color == 'red':
         c = [[.567, .433, 0], [.558, .442, 0], [0, .242, .758]]
     elif color == 'green':
@@ -33,7 +32,6 @@ def matrix_multiply(m1, m2):
         result: matrix product of m1 and m2
         in a list of floats
     """
-
     product = numpy.matmul(m1, m2)
     if type(product) == numpy.int64:
         return float(product)
@@ -157,9 +155,11 @@ def extract_end_bits(num_end_bits, pixel):
     Returns:
         The num_end_bits of pixel, as an integer (BW) or tuple of integers (RGB).
     """
+    # Check the integers
     if isinstance(pixel, int):
         return pixel % (2 ** num_end_bits)
     
+    # Check the tuples
     if isinstance(pixel, tuple):
         return tuple(n % (2 ** num_end_bits) for n in pixel)
 
@@ -172,7 +172,29 @@ def reveal_bw_image(filename):
     Returns:
         result: an Image object containing the hidden image
     """
-    pass
+    LSB_list = []
+    
+    # Load the image
+    with Image.open(filename) as img:
+        grayscale_img = img.convert("L")
+        width, height = grayscale_img.size
+    
+    # Convert image → pixel list
+    img_pixel_list = list(grayscale_img.getdata())
+    
+    # Extract the LSB from each pixel
+    for pixel in img_pixel_list:
+        LSB_list.append(extract_end_bits(1, pixel))
+    
+    # Rebuild the image
+    new_img = Image.new('L', (width, height))
+    
+    # Scale 0→0 (black) and 1→255 (white) for visibility
+    scaled_LSB = [bit * 255 for bit in LSB_list]
+    
+    new_img.putdata(scaled_LSB)
+    
+    return new_img
 
 
 def reveal_color_image(filename):
@@ -230,17 +252,17 @@ def main():
 
     # Uncomment the following lines to test part 1
 
-    im = Image.open('image_15.png')
-    width, height = im.size
-    pixels = img_to_pix('image_15.png')
+    # im = Image.open('image_15.png')
+    # width, height = im.size
+    # pixels = img_to_pix('image_15.png')
 
-    non_filtered_pixels = filter(pixels,'none')
-    im = pix_to_img(non_filtered_pixels, (width, height), 'RGB')
-    im.show()
+    # non_filtered_pixels = filter(pixels,'none')
+    # im = pix_to_img(non_filtered_pixels, (width, height), 'RGB')
+    # im.show()
 
-    red_filtered_pixels = filter(pixels,'red')
-    im2 = pix_to_img(red_filtered_pixels,(width,height), 'RGB')
-    im2.show()
+    # red_filtered_pixels = filter(pixels,'red')
+    # im2 = pix_to_img(red_filtered_pixels,(width,height), 'RGB')
+    # im2.show()
 
     # Uncomment the following lines to test part 2
     #im = reveal_image('hidden1.bmp')
