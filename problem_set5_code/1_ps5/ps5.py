@@ -205,7 +205,30 @@ def reveal_color_image(filename):
     Returns:
         result: an Image object containing the hidden image
     """
-    pass
+    LSB_data = []
+    
+    # Open the image
+    with Image.open(filename) as image:
+        rgb_img = image.convert('RGB')
+        width, height = rgb_img.size
+      
+    # Extract pixel data
+    pixel_data = list(rgb_img.getdata())
+    
+    # Pixel data structure
+    for (r, g, b) in pixel_data:
+        # Extract LSBs per channel
+        LSB_data.append(extract_end_bits(1, (r, g, b)))
+    
+    # Build the new pixel list by Making the hidden image visible
+    new_pix_list = [(new_r * 255, new_g * 255, new_b * 255) for (new_r, new_g, new_b) in LSB_data]
+    
+    # Rebuild the image
+    rgb_img = Image.new('RGB', (width, height))
+    
+    rgb_img.putdata(new_pix_list)
+    
+    return rgb_img
 
 
 def reveal_image(filename):
