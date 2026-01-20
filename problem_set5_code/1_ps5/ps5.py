@@ -218,10 +218,10 @@ def reveal_color_image(filename):
     # Pixel data structure
     for (r, g, b) in pixel_data:
         # Extract LSBs per channel
-        LSB_data.append(extract_end_bits(1, (r, g, b)))
+        LSB_data.append(extract_end_bits(3, (r, g, b)))
     
     # Build the new pixel list by Making the hidden image visible
-    new_pix_list = [(new_r * 255, new_g * 255, new_b * 255) for (new_r, new_g, new_b) in LSB_data]
+    new_pix_list = [(int(new_r * 255 / 7), int(new_g * 255 / 7), int(new_b * 255 / 7)) for (new_r, new_g, new_b) in LSB_data]
     
     # Rebuild the image
     rgb_img = Image.new('RGB', (width, height))
@@ -268,32 +268,3 @@ def draw_kerb(filename, kerb):
     new_filename = filename[:idx] + "_kerb" + filename[idx:]
     im.save(new_filename)
     return
-
-
-def main():
-    pass
-
-    # Uncomment the following lines to test part 1
-
-    # im = Image.open('image_15.png')
-    # width, height = im.size
-    # pixels = img_to_pix('image_15.png')
-
-    # non_filtered_pixels = filter(pixels,'none')
-    # im = pix_to_img(non_filtered_pixels, (width, height), 'RGB')
-    # im.show()
-
-    # red_filtered_pixels = filter(pixels,'red')
-    # im2 = pix_to_img(red_filtered_pixels,(width,height), 'RGB')
-    # im2.show()
-
-    # Uncomment the following lines to test part 2
-    #im = reveal_image('hidden1.bmp')
-    # im.show()
-
-    #im2 = reveal_image('hidden2.bmp')
-    # im2.show()
-    
-
-if __name__ == '__main__':
-    main()
