@@ -1,18 +1,8 @@
-# 6.100A Fall 2022
-# Problem Set 3
-# Written by: sylvant, muneezap, charz, anabell, nhung, wang19k, asinelni, shahul, jcsands
-
-# Problem Set 3
-# Name:
-# Collaborators:
-
 # Purpose: Check for similarity between two texts by comparing different kinds of word statistics.
-
 import string
 import math
 
 
-### DO NOT MODIFY THIS FUNCTION
 def load_file(filename):
     """
     Args:
@@ -20,7 +10,7 @@ def load_file(filename):
     Returns:
         string, contains file contents
     """
-    # print("Loading file %s" % filename)
+
     inFile = open(filename, 'r')
     line = inFile.read().strip()
     for char in string.punctuation:
@@ -33,8 +23,7 @@ def load_file(filename):
 def text_to_list(input_text):
     """
     Args:
-        input_text: string representation of text from file.
-                    assume the string is made of lowercase characters
+        input_text: string representation of text from file made of lowercase characters
     Returns:
         list representation of input_text, where each word is a different element in the list
     """
@@ -52,8 +41,6 @@ def get_frequencies(input_iterable):
         dictionary that maps string:int where each string
         is a letter or word in input_iterable and the corresponding int
         is the frequency of the letter or word in input_iterable
-    Note: 
-        You can assume that the only kinds of white space in the text documents we provide will be new lines or space(s) between words (i.e. there are no tabs)
     """
     # Initialize an empty dict, then add keys with their frequencies
     freq_dict = {}
@@ -88,9 +75,6 @@ def get_letter_frequencies(word):
 ### Problem 3: Similarity ###
 def calculate_similarity_score(freq_dict1, freq_dict2):
     """
-    The keys of dict1 and dict2 are all lowercase,
-    you will NOT need to worry about case sensitivity.
-
     Args:
         freq_dict1: frequency dictionary of letters of word1 or words of text1
         freq_dict2: frequency dictionary of letters of word2 or words of text2
@@ -108,7 +92,6 @@ def calculate_similarity_score(freq_dict1, freq_dict2):
           frequency from dict2
          The total frequencies = ALL is calculated by summing
          all frequencies in both dict1 and dict2.
-        Return 1-(DIFF/ALL) rounded to 2 decimal places
     """
     # Get all unique elements from both dictionaries
     unique_elem = set(freq_dict1.keys()) | set(freq_dict2.keys())
@@ -221,7 +204,6 @@ def get_idf(file_paths):
         file_paths: list of names of files, where each file name is a string
     Returns:
        a dictionary mapping each word to its IDF
-
     * IDF is calculated as IDF(i) = log_10(total number of documents / number of
     documents with word *i* in it), where log_10 is log base 10 and can be called
     with math.log10()
