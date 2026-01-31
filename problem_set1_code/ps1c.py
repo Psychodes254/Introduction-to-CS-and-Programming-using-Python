@@ -1,12 +1,6 @@
 def choosing_interest_rate():
-    ##############################################
-    ## Get user input for initial_deposit below ##
-    ##############################################
     user_input = float(input("Enter the initial deposit: "))
     
-    #########################################################################
-    ## Initialize other variables you need (if any) for your program below ##
-    #########################################################################
     # Constant home cost
     home_cost = 800000
     
@@ -31,9 +25,7 @@ def choosing_interest_rate():
     # Initial midpoint
     mid_point = (upper_bound + lower_bound) / 2
     
-    ##################################################################################################
-    ## Determine the lowest rate of return needed to get the down payment for your dream home below ##
-    ##################################################################################################
+    
     # First check if it is possible to reach the goal with 100% interest
     if user_input * (1 + upper_bound / 12) ** months < down_payment:
         print("It is not possible to reach savings goal in 3 years!")
@@ -72,6 +64,3 @@ def choosing_interest_rate():
 steps = choosing_interest_rate()
 
 print(f"Steps in bisection search: {steps}")
-    
-    
-    
